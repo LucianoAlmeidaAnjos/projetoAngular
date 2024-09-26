@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { ProductsService } from '../../shared/services/products.service';
 
 @Component({
   selector: 'app-create',
@@ -11,14 +12,24 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
+
 export class CreateComponent {
+  
+  productsService = inject(ProductsService);
+
   form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
       validators: Validators.required
     }),
   });
+
   onSubmit() {
-    this.form.controls.title.value;
+    this.productsService.post({
+      title: this.form.controls.title.value
+    })
+    .subscribe(() => {
+      alert("Sucesso!")
+    })
   }
 }
